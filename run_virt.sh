@@ -9,7 +9,7 @@ qemu-system-aarch64 \
 	-M virt \
 	-cpu cortex-a53 \
 	-nographic \
-	-smp 1 \
+	-smp 4 \
 	-kernel  linux/out/arch/arm64/boot/Image \
 	-append "rootwait root=/dev/vda console=ttyAMA0" \
 	-netdev user,id=eth0 \

@@ -8,3 +8,7 @@ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-  O=${OUT} defconfig
 make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-  O=${OUT} -j8
 # install moduels
 make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-  O=${OUT} modules_install INSTALL_MOD_PATH=_modules
+
+# generate compile_commands.json
+popd
+linux/scripts/clang-tools/gen_compile_commands.py -d linux/${OUT}
