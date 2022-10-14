@@ -1,0 +1,4 @@
+[submodule "linux"]
+	path = linux
+	url = https://mirrors.tuna.tsinghua.edu.cn/git/linux-stable.git
+	branch = master
