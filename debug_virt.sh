@@ -9,10 +9,11 @@ qemu-system-aarch64 \
 	-M virt \
 	-cpu cortex-a53 \
 	-nographic \
-	-smp 4 \
+	-smp 1 \
 	-kernel  linux/out_arm64/arch/arm64/boot/Image \
-	-append "rootwait root=/dev/vda console=ttyAMA0" \
+	-append "rootwait root=/dev/vda console=ttyAMA0 earlycon nokaslr" \
 	-netdev user,id=eth0 \
 	-device virtio-net-device,netdev=eth0 \
 	-drive file=out/rootfs_arm64.ext4,if=none,format=raw,id=hd0 \
-	-device virtio-blk-device,drive=hd0
+	-device virtio-blk-device,drive=hd0 \
+	-S -gdb tcp::1234
