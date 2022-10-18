@@ -7,29 +7,30 @@
 struct cdev2_st {
 	dev_t no;
 	unsigned int user;
-	struct cdev dev;
+	struct cdev cdev;
 	struct class *my_class;
+	struct device *dev;
 	char buf[1024];
 };
 static struct cdev2_st *cd;
 
 static int cdev2_open(struct inode *inode, struct file *file)
 {
-	struct cdev2_st *st = container_of(inode->i_cdev, struct cdev2_st, dev);
+	struct cdev2_st *st = container_of(inode->i_cdev, struct cdev2_st, cdev);
 
-	file->private_data = (void *)st->buf;
+	file->private_data = (void *)st;
 	st->user++;
-	dump_stack();
+	// dump_stack();
 
 	return 0;
 }
 
 static int cdev2_release(struct inode *inode, struct file *file)
 {
-	struct cdev2_st *st = container_of(inode->i_cdev, struct cdev2_st, dev);
+	struct cdev2_st *st = container_of(inode->i_cdev, struct cdev2_st, cdev);
 
 	st->user--;
-	dump_stack();
+	// dump_stack();
 
 	return 0;	
 }
@@ -40,8 +41,8 @@ static ssize_t cdev2_read(struct file *file, char __user *buf, size_t len, loff_
 	struct cdev2_st *st = file->private_data;
 
 	ret = copy_to_user(buf, st->buf, len);
-	pr_info("Read: %s, len: %ld\n", st->buf, len);
-	dump_stack();
+	dev_dbg(st->dev, "Read: %s, len: %ld\n", st->buf, len);
+	// dump_stack();
 
 	return len - ret;
 }
@@ -52,8 +53,8 @@ static ssize_t cdev2_write(struct file *file, const char __user *buf, size_t len
 	struct cdev2_st *st = file->private_data;
 
 	ret = copy_from_user(st->buf, buf, len);
-	pr_info("Write: %s\n", st->buf);
-	dump_stack();
+	dev_dbg(cd->dev, "Write: %s\n", st->buf);
+	// dump_stack();
 
 	return len - ret;
 }
@@ -78,15 +79,15 @@ static __init int cdev2_init(void)
 	cd->no = MKDEV(122, 1);
 	register_chrdev(122, "tc1", &fops);
 
-	cdev_init(&cd->dev, &fops);
-	ret = cdev_add(&cd->dev, cd->no, 1);
+	cdev_init(&cd->cdev, &fops);
+	ret = cdev_add(&cd->cdev, cd->no, 1);
 	if (ret) {
 		pr_err("cdev add error!\n");
 		return ret;
 	}
 	cd->my_class = class_create(THIS_MODULE, "my");
-	device_create(cd->my_class, NULL, cd->no, NULL, "tc1");
-	printk("Hello, load linux driver!\n");
+	cd->dev = device_create(cd->my_class, NULL, cd->no, NULL, "tc1");
+	printk("Hello, load linux driver!: %p\n", cd->dev);
 	return 0;
 }
 
