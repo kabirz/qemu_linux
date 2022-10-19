@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "arm64 debug",
+            "name": "arm64 qemu debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/linux/out_arm64/vmlinux",
+            "program": "${workspaceFolder}/linux/kdb_out/vmlinux",
             "cwd": "${workspaceFolder}",
             "targetArchitecture": "arm64",
             "stopAtEntry": true,
@@ -22,6 +22,18 @@
                     "ignoreFailures": true
                 }
             ]
+        },
+        {
+            "name": "arm64 kgdb debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/linux/kdb_out/vmlinux",
+            "cwd": "${workspaceFolder}",
+            "targetArchitecture": "arm64",
+            "stopAtEntry": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb-multiarch",
+            "miDebuggerServerAddress": "localhost:1234"
         }
     ]
 }
