@@ -34,6 +34,19 @@
             "MIMode": "gdb",
             "miDebuggerPath": "/usr/bin/gdb-multiarch",
             "miDebuggerServerAddress": "localhost:1234"
+        },
+        {
+            "name": "arm kgdb debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/linux/out_vexpress/vmlinux",
+            "cwd": "${workspaceFolder}",
+            "targetArchitecture": "arm",
+            "stopAtEntry": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb-multiarch",
+            "miDebuggerServerAddress": "localhost:1234"
         }
+
     ]
 }

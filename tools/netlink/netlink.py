@@ -1,6 +1,7 @@
 import os
 import socket
 
+
 class NetworkSocket(socket.socket):
     def __init__(self):
         NETLINK_KOBJECT_UEVENT = 15
@@ -9,22 +10,19 @@ class NetworkSocket(socket.socket):
 
     def parse(self):
         data = self.recv(512)
-        event = {}
-        for item in data.split('\x00'):
-            if not item:
-                yield event
-                event = {}
-            else:
+        print("{0} received data size: {1} {0}".format('#'*20, len(data)))
+        for item in data.split(b'\0'):
+            if len(item) > 0:
                 try:
-                    k, v = item.split('=', 1)
-                    event[k] = v
-                except:
-                    event[None] = item
+                    print(item.decode('utf-8'))
+                except UnicodeDecodeError:
+                    pass
 
 
 if __name__ == "__main__":
     nls = NetworkSocket()
-    while True:
-        for item in nls.parse():
-            print(item)
-
+    try:
+        while True:
+            nls.parse()
+    except KeyboardInterrupt:
+        print("\nDone")
