@@ -1,0 +1,18 @@
+How to install Linux system through USB Device?  more details as follow:
+
+Make usb boot to install system    (emmc)
+
+1.you can logon Linux server(hostname:shldeJointD232  user: root   passwd:intel@123) ,then  run command:   cd /home/tester/share/
+2.you can create directory to save image file ,run command: mkdir –p xxx
+3.copy image file from “root@shldejointd234”  to “root@shldeJointD232”, run command:  scp  -r   root@shldejointd234:/share/nfs/Artifacts/DailyBuild/391/sdkimage*     ./xxx
+4.run command :tar  -xvf  ./xxx/sdkimage-391.tar.bz2
+5.run command: sudo ./mkefidisk_emmc.sh  ./core-image-sato-sdk-intel-corei7-64-391.hddimg    /dev/sdb
+6.wait a minute, then you can use this usb Device to install system.
+
+Make usb system disk
+
+1.repeat above step 1~4
+2.run command: sudo  ./mkefidisk.sh  /dev/sdb   ./core-image-sato-sdk-intel-corei7-64-391.hddimg   /dev/sda
+3.wait a minute,then you can use this usb Device .
+
+Note:  /dev/sda   指的是你本地磁盘      /dev/sdb  指的是你的U 盘   you can run command :fdisk –l    查看你的磁盘列表
